@@ -136,6 +136,42 @@ Aqui estão os comandos executados no terminal durante o desenvolvimento e confi
     +----+----------------+-------------------+---------------------+
     ```
 
+13. **Comando:**
+    ```bash
+    docker commit container-microservico microservico-personalizado:v1
+    ```
+    **Descrição:**
+    Cria uma nova imagem Docker chamada `microservico-personalizado:v1` a partir do estado atual do container `container-microservico`.
+    **Resultado:**
+    Imagem criada com sucesso.
+
+14. **Comando:**
+    ```bash
+    docker tag microservico-personalizado:v1 microservico-personalizado:v2
+    ```
+    **Descrição:**
+    Cria uma nova tag `v2` para a imagem `microservico-personalizado:v1`.
+    **Resultado:**
+    Tag criada com sucesso.
+
+15. **Comando:**
+    ```bash
+    docker push william201192/microservico-personalizado:v1
+    ```
+    **Descrição:**
+    Envia a imagem `william201192/microservico-personalizado:v1` para o Docker Hub.
+    **Resultado:**
+    Imagem enviada com sucesso.
+
+16. **Comando:**
+    ```bash
+    docker push william201192/microservico-personalizado:v2
+    ```
+    **Descrição:**
+    Envia a imagem `william201192/microservico-personalizado:v2` para o Docker Hub.
+    **Resultado:**
+    Imagem enviada com sucesso.
+
 ## Como Executar o Projeto
 
 1. Certifique-se de ter o Docker instalado em sua máquina.
