@@ -2,6 +2,21 @@
 
 Este projeto é um microsserviço desenvolvido em Python utilizando Flask. Ele se conecta a um banco de dados MySQL e expõe endpoints para verificar o status do serviço e listar usuários. O objetivo é demonstrar a integração entre um serviço web e um banco de dados relacional utilizando contêineres Docker.
 
+# Como Baixar e Clonar Este Repositório
+
+1. Certifique-se de ter o Git instalado em sua máquina. Caso não tenha, faça o download e instale a partir do [site oficial do Git](https://git-scm.com/).
+2. Abra o terminal ou prompt de comando.
+3. Navegue até o diretório onde deseja clonar o repositório.
+4. Execute o seguinte comando:
+   ```bash
+   git clone https://github.com/Williamfiap/meu-microservico.git
+   ```
+   Substitua `https://github.com/Williamfiap/meu-microservico.git` pelo link do repositório no GitHub.
+5. Após clonar, navegue até o diretório do projeto:
+   ```bash
+   cd meu-microservico
+   ```
+
 ## Estrutura do Projeto
 
 - **app.py**: Código principal do microsserviço, implementado com Flask. Ele expõe endpoints para verificar o status do serviço e listar usuários do banco de dados.
@@ -247,3 +262,98 @@ Aqui estão os comandos executados no terminal durante o desenvolvimento e confi
   ```bash
   docker logs <container-microservico>
   ```
+
+## Perguntas e Respostas
+
+### 📦 Parte 1: Persistência com Volumes
+
+**Implementar persistência com docker volume ou bind mount.**
+
+Foi utilizado um **docker volume** chamado `dados-mysql` para persistir os dados do banco de dados MySQL. A escolha foi feita porque volumes são gerenciados diretamente pelo Docker, oferecendo maior simplicidade e portabilidade em comparação com bind mounts, além de serem mais seguros para armazenar dados sensíveis.
+
+**Comandos Utilizados:**
+```bash
+# Criar o volume
+docker volume create dados-mysql
+```
+
+### 🛢️ Parte 2: Container com MySQL
+
+**Criar banco ou tabela dentro do container MySQL.**
+
+O banco de dados `microssistema` e a tabela `usuarios` foram criados automaticamente ao iniciar o container MySQL com o script `init.sql`. O script contém os comandos SQL necessários para criar o banco e a tabela, além de inserir dados de exemplo.
+
+**Comandos Utilizados:**
+```bash
+# Copiar o script para o container
+docker cp ./init.sql mysql-container:/init.sql
+
+# Executar o script dentro do container
+docker exec -it mysql-container mysql -uroot -psenha123 -e "source /init.sql"
+```
+
+### 🧱 Parte 3: Imagem Personalizada
+
+**Comitar o container com docker commit.**
+
+O container `container-microservico` foi comitado para criar uma imagem personalizada chamada `microservico-personalizado:v1`.
+
+**Criar as tags v1 e v2.**
+
+Após o commit, foi criada a tag `v2` para a imagem `microservico-personalizado:v1` utilizando o comando `docker tag`.
+
+**Comandos Utilizados:**
+```bash
+# Comitar o container para criar a imagem personalizada
+docker commit container-microservico microservico-personalizado:v1
+
+# Criar a tag v2
+docker tag microservico-personalizado:v1 microservico-personalizado:v2
+```
+
+### ☁️ Parte 4: Docker Hub
+
+**Criar conta (ou usar pessoal).**
+
+Foi utilizada a conta pessoal no Docker Hub com o nome de usuário `william201192`.
+
+**Subir as imagens com docker push.**
+
+As imagens `microservico-personalizado:v1` e `microservico-personalizado:v2` foram enviadas para o Docker Hub utilizando o comando `docker push`.
+
+**Link no Docker Hub:**
+
+[Link para as imagens no Docker Hub](https://hub.docker.com/r/william201192/microservico-personalizado)
+
+**Comandos Utilizados:**
+```bash
+# Fazer login no Docker Hub
+docker login
+
+# Subir a imagem v1
+docker push william201192/microservico-personalizado:v1
+
+# Subir a imagem v2
+docker push william201192/microservico-personalizado:v2
+```
+
+### 🔁 Parte 5: Testar Persistência
+
+**Demonstrar que os dados continuam após reinicializar ou remover/recriar os containers.**
+
+A persistência foi testada reiniciando e recriando o container MySQL. Os dados permaneceram intactos devido ao uso do volume `dados-mysql`. Os seguintes comandos foram utilizados para testar a persistência:
+
+**Comandos Utilizados:**
+```bash
+# Parar o container
+docker stop mysql-container
+
+# Remover o container
+docker rm mysql-container
+
+# Recriar o container
+docker run -d --name mysql-container -e MYSQL_ROOT_PASSWORD=senha123 -e MYSQL_DATABASE=microssistema -v dados-mysql:/var/lib/mysql -p 3306:3306 mysql:8.0
+
+# Verificar os dados
+docker exec -it mysql-container mysql -uroot -psenha123 -e "SELECT * FROM microssistema.usuarios;"
+```
