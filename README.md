@@ -11,7 +11,8 @@ Este projeto é um microsserviço desenvolvido em Python utilizando Flask. Ele s
    ```bash
    git clone https://github.com/Williamfiap/meu-microservico.git
    ```
-   Substitua `https://github.com/Williamfiap/meu-microservico.git` pelo link do repositório no GitHub.
+    `https://github.com/Williamfiap/meu-microservico.git`
+
 5. Após clonar, navegue até o diretório do projeto:
    ```bash
    cd meu-microservico
